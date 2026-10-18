@@ -1,0 +1,20 @@
+// use prisma-8
+model User {
+  id        Int                        @id @default(autoincrement())
+  email     String                     @unique
+  username  String?
+  name      String?
+  posts     Post[]
+  createdAt TimestamptzString          @default(now())
+  updatedAt temporal.updatedAtString()
+}
+
+model chat {
+  id        Int                        @id @default(autoincrement())
+  message     String
+  status      String
+  author    User                       @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt TimestamptzString          @default(now())
+  updatedAt temporal.updatedAtString()
+}
