@@ -35,9 +35,9 @@ app.use((err, req, res, _) =>{
 })
 
 import userRouter from "./routes/user.routes.js";
-import chatRouter from "./routes/chat.routes.js"
+
 app.use("/api",userRouter )
-app.use('/api',chatRouter)
+
 
 
 export default app;
