@@ -1,17 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser } from "./userthunk";
-
+import { fetchProfile, loginUser, registerUser } from "./userthunk";
 
 const initialState = {
- user:{name:"",
-    email:"",
-    userName : "",
-    password:null,
-    photo :''
-
-},
+ user:{},
  error : null,
- loading  : false
+ loading  : false,
+ isAuthenticate : false,
+ isAuthChecked : false  
 }
 const userReducer = createSlice({
     name : "users",
@@ -20,6 +15,7 @@ const userReducer = createSlice({
        clearuser(state){
            state.error = null,
           state.user = {}
+          state.user = null
        }
     },
 
@@ -40,7 +36,44 @@ const userReducer = createSlice({
             state.loading = false
             state.error = action.payload || action.error.message || "Could not register user"
         })
+
+        .addCase(loginUser.pending,(state)=>{
+            state.loading = true
+            state.error = ""
+        })
+
+        .addCase(loginUser.fulfilled,(state, action)=>{
+            // console.log("action", action)
+            state.error = null
+            state.loading = false
+         
+        })
+
+        .addCase(loginUser.rejected,(state, action)=>{
+            console.log("action", action)
+            state.loading = false
+            state.error = action.payload.message   || "login failed"
+            
+        })
+
+        .addCase(fetchProfile.pending,(state) =>{
+            state.isAuthenticate = false;
+            state.error =null
+        })
+
+        .addCase(fetchProfile.fulfilled,(state, action) =>{
+            state.isAuthenticate = true;
+            state.isAuthChecked  = true;
+            state.user = action.payload.data
+        })
+         .addCase(fetchProfile.rejected,(state) =>{
+            state.isAuthenticate = false;
+            state.isAuthChecked  = true;
+            state.user = null
+        })
     }
+
+    
 })
 
 export const {clearuser} = userReducer.actions;

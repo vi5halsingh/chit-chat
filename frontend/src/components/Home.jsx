@@ -1,5 +1,7 @@
+import useSocket from "../hooks/useSocket";
+import socket from "../utils/socket";
 import "./Home.css";
-
+import {useSelector} from "react-redux"
 const conversations = [
   {
     id: 1,
@@ -11,50 +13,16 @@ const conversations = [
     color: "avatar-purple",
     online: true,
   },
-  {
-    id: 2,
-    name: "Development Team",
-    message: "Aman: PR review kar dena",
-    time: "10:30 AM",
-    unread: 4,
-    avatar: "D",
-    color: "avatar-green",
-    online: false,
-    group: true,
-  },
-  {
-    id: 3,
-    name: "Aman Verma",
-    message: "Thanks for the update!",
-    time: "Yesterday",
-    unread: 0,
-    avatar: "A",
-    color: "avatar-orange",
-    online: true,
-  },
-  {
-    id: 4,
-    name: "Priya Singh",
-    message: "See you tomorrow.",
-    time: "Yesterday",
-    unread: 0,
-    avatar: "P",
-    color: "avatar-pink",
-    online: false,
-  },
-  {
-    id: 5,
-    name: "Project Updates",
-    message: "New announcement available",
-    time: "Mon",
-    unread: 0,
-    avatar: "B",
-    color: "avatar-blue",
-    broadcast: true,
-  },
+ 
 ];
 
 const Home = () => {
+  const {user, isAuthenticate } = useSelector((state => state.users))
+
+  useSocket(isAuthenticate)
+  
+   console.log("Socket status:", socket.connected);
+ 
   return (
     <main className="guardian-home">
       {/* Sidebar */}
@@ -69,7 +37,7 @@ const Home = () => {
           <div className="profile-avatar">V</div>
 
           <div className="sidebar-user-info">
-            <h3>Vishal Singh</h3>
+            <h3>{user?.name}</h3>
             <span>
               <i className="online-dot" /> Available
             </span>

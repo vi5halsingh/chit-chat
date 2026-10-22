@@ -5,7 +5,7 @@ export  const isAuthenticated = (req, res, next) =>{
     try {
         
     
-    const token = req.cookies?.token || req.headers.Authorization?.replace("Bearer",",")
+    const token = req.cookies?.token || req.headers.Authorization?.replace("Bearer","")
 
     if(!token){
         return res.status(401).json({

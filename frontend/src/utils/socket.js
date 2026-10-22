@@ -1,17 +1,9 @@
-import {io} from "socket.io-client"
-const url = 'http://localhost:5173'
-const socket = io(url,{
-    autoConnect:false,
-    withCredentials:true,
-    
-})
+import { io } from "socket.io-client";
 
-socket.on("connect",() =>{
-    console.log("socket connected", socket.id);
+const socket = io("http://localhost:3000", {
+  autoConnect: false,
+  transports: ["websocket"],
+  reconnection: false,
 });
-
-socket.on("connect_error", (error)=>{
-    console.log("error while connection socket",error)
-})
 
 export default socket;

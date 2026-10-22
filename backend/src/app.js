@@ -4,21 +4,21 @@ import express from "express";
 const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser"
+import status from "express-status-monitor"
 
 app.use(express.json());
 const corsOption = {
-    origin:["http://localhost:5173/",
-            "http://localhost:3000/"
+    origin:["http://localhost:5173",
+            "http://localhost:3000"
     ],
-    allowedHeaders : {
-        accept : true
-    },
+    allowedHeaders :["Content-Type","Authorization"],
     methods:['POST','GET','PUT','PATCH','DELETE'],
     credentials : true
 }
 app.use(cors(corsOption))
 app.use(express.urlencoded({extended :true}))
 app.use(cookieParser())
+app.use(status())
 
 app.use((err, req, res, _) =>{
    const  statusCode = err.statusCode || 500

@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Auth.css";
-import socket from "../utils/socket";
-import { registerUser } from "../features/user/userthunk";
+import { fetchProfile, loginUser, registerUser } from "../features/user/userthunk";
 import {useDispatch, useSelector} from "react-redux"
 import {useNavigate} from "react-router-dom"
 import { clearuser } from "../features/user/userReducer";
@@ -9,6 +8,7 @@ import { clearuser } from "../features/user/userReducer";
 const Auth = () => {
 
   const User = useSelector(state => state.users.user)
+ 
   const [isLogin, setIsLogin] = useState(true);
   const [user, setUser ] = useState({
     name : User?.name,
@@ -44,17 +44,22 @@ const Auth = () => {
     if(!user){
       throw new Error("all firlds are required");
     }
-    console.log(user)
+    
     dispatch(registerUser(data));
     dispatch(clearuser())
-    navigate("/")
+   
   }
 
   const loginHandler = async(e) =>{
-    e.preventDefault();
-    // dispatch(registerUser(user));
-    navigate("/")
+    await dispatch(loginUser(user)).unwrap();
+
+    await dispatch(fetchProfile()).unwrap();
+    
   }
+
+  //   useEffect(() => {
+ 
+  // }, [dispatch]);
 
  const  onClickHandler = (e) =>{
   e.preventDefault()
@@ -144,6 +149,18 @@ const Auth = () => {
           <form>
             {!isLogin && (
               <>
+               <div className="input-group">
+              <label htmlFor="photo">Profile image</label>
+
+              <input
+                id="photo"
+                name="photo"
+                type="file"
+                accept="image/webp, image/avif"
+                placeholder="choose your profile photo"
+                onChange={(e) =>{setPhoto(e.target.files[0] || null)}}
+              />
+            </div>
                 <div className="input-group">
                   <label htmlFor="name">Full name</label>
                   <input
@@ -203,18 +220,7 @@ const Auth = () => {
                 onChange={onChangeHandler}
               />
             </div>
-             <div className="input-group">
-              <label htmlFor="password">Password</label>
-
-              <input
-                id="photo"
-                name="photo"
-                type="file"
-                accept="image/webp, image/avif"
-                placeholder="choose your profile photo"
-                onChange={(e) =>{setPhoto(e.target.files[0] || null)}}
-              />
-            </div>
+            
 
             {isLogin && (
               <div className="login-options">

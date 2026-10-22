@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 
 export const userRegister = async(req, res)=>{
     const {name, email, userName,password} = req.body;
+    // console.log(req.body)
     const photoUrl = req.file ? `/uploads/${req.file.filename} `: null ;
     // console.log("photo", photoUrl)
     try {
@@ -59,7 +60,7 @@ export const loginUser = async(req, res) =>{
             throw new Error("user not exist with email or user name")
         }
     
-        const isPasswordMatch = bcrypt.compare(password,user.password)
+        const isPasswordMatch =await bcrypt.compare(password,user.password)
 
         if (!isPasswordMatch){
             throw new Error("incorrect password")
@@ -84,7 +85,7 @@ export const loginUser = async(req, res) =>{
         res.status(200).json({
             success : true,
             message : "user logged in successfully",
-            data : token
+            
         })
     } catch (error) {
         console.log(error)
