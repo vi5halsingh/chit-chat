@@ -20,14 +20,16 @@ export default function useSocket(isAuthenticated) {
     };
 
     const onConnectError = (error) => {
-      console.log("CONNECT ERROR:", error.message);
+      console.error("CONNECT ERROR:", {
+        message: error.message,
+        description: error.description,
+        context: error.context,
+      });
     };
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("connect_error", onConnectError);
-
-    console.log("Calling socket.connect()");
 
     socket.connect();
     

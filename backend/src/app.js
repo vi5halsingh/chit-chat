@@ -4,7 +4,6 @@ import express from "express";
 const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser"
-import status from "express-status-monitor"
 
 app.use(express.json());
 const corsOption = {
@@ -18,7 +17,6 @@ const corsOption = {
 app.use(cors(corsOption))
 app.use(express.urlencoded({extended :true}))
 app.use(cookieParser())
-app.use(status())
 
 app.use((err, req, res, _) =>{
    const  statusCode = err.statusCode || 500

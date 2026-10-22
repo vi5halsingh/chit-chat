@@ -13,7 +13,15 @@ export const initializeSocket = (httpServer) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("SOCKET CONNECTED:", socket.id);
+    console.log("SOCKET CONNECTED:", socket.id, "transport:", socket.conn.transport.name);
+
+    socket.conn.on("upgrade", (transport) => {
+      console.log("SOCKET TRANSPORT UPGRADED:", socket.id, transport.name);
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log("SOCKET DISCONNECTED:", socket.id, reason);
+    });
   });
 
 //   io.engine.on("connection_error", (error) => {
