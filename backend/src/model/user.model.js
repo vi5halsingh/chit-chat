@@ -26,8 +26,12 @@ const userSchema = mongoose.Schema({
     photo :{
         type : String,
         
-    }
-}, {timeStamp:true })
+    },
+    lastSeen: {
+  type: Date,
+  default: null,
+}
+}, {timestamp:true })
 
 const userModel = mongoose.model("user", userSchema);
 export default userModel;

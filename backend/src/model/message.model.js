@@ -18,8 +18,36 @@ const messageSchema = mongoose.Schema({
         type : String,
         enum : ['sent', 'delevared','read'],
         default:'sent'
-    }
-}, {timeStamp:true })
+    },
+    messageType : {
+        type : String,
+        enum:['text', 'pdf', 'image','video','file','audio'],
+        default:'text'
+    },
 
-const messageModel = mongoose.model("user", messageSchema);
+    media :{
+        url :{
+            type : String,
+            default : null
+        },
+        size : {
+            type : Number
+        },
+        mimeType:{
+            type : String,
+            default : null
+        },
+        fileName :{
+            type:String,
+            default : null
+        },
+        publicId :{
+            type:String,
+            default:null
+        }
+    }
+    
+}, {timestamp:true })
+
+const messageModel = mongoose.model("message", messageSchema);
 export default messageModel;

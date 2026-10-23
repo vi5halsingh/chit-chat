@@ -1,4 +1,6 @@
 import { Server } from "socket.io";
+import jwt from "jsonwebtoken"
+import * as cookie from "cookie";
 
 export const initializeSocket = (httpServer) => {
   const io = new Server(httpServer, {
@@ -8,12 +10,41 @@ export const initializeSocket = (httpServer) => {
     },
   });
 
+  io.use((socket, next) =>{
+
+   const cookies = cookie.parseCookie(
+        socket.handshake.headers.cookie || ""
+      );
+   
+    const token = cookies.token;
+ 
+    if(!token){
+        return next(new Error("User is not authenticate"))
+    }
+
+    const decoded = jwt.verify(token,process.env.JWT_SECRET)
+
+    socket.data.userId = decoded._id
+
+    next()
+  })
+
   io.engine.on("initial_headers", (headers, request) => {
     console.log("HANDSHAKE RECEIVED:", request.url);
   });
 
   io.on("connection", (socket) => {
     console.log("SOCKET CONNECTED:", socket.id, "transport:", socket.conn.transport.name);
+
+    const userId = socket.data?.userId?.toString();
+
+    socket.join(userId);
+
+    console.log("socket connected ", {
+      socket : socket.id,
+      room:userId,
+      userId
+    })
 
     socket.conn.on("upgrade", (transport) => {
       console.log("SOCKET TRANSPORT UPGRADED:", socket.id, transport.name);

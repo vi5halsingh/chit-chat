@@ -36,6 +36,13 @@ import userRouter from "./routes/user.routes.js";
 
 app.use("/api",userRouter )
 
+import conversationRoutes from "./routes/conversation.routes.js";
+
+app.use("/api/conversations", conversationRoutes);
+
+import messageRoutes from "./routes/message.routes.js";
+
+app.use("/api/message", messageRoutes);
 
 
 export default app;
